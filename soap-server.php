@@ -6,7 +6,7 @@ class NewsService extends NewsDB{
 		try{
 			$sql = "SELECT id, title, 
 					(SELECT name FROM category WHERE category.id=msgs.category) as category, description, source, datetime 
-					FROM msgsa
+					FROM msgs
 					WHERE id = $id";
 			$result = $this->_db->query($sql);
 			if (!is_object($result)) 
@@ -20,7 +20,7 @@ class NewsService extends NewsDB{
 	function getNewsCount(){
 		try{
 			$sql = "SELECT count(*) FROM msgs";
-			$result = $this->_db->querySingle($sql);
+			$result = $this->_db->query($sql);
 			if (!$result) 
 				throw new Exception($this->_db->lastErrorMsg());
 			return $result;
@@ -41,3 +41,10 @@ class NewsService extends NewsDB{
 		}
 	}
 }
+// Создание сервера
+$client = new SoapClient("stock.wsdl");
+// Вызов удалённой процедуры
+$amount = $server->getStock("b");
+echo "Товаров на полке: $amount";
+// Посмотреть список доступных операций
+print_r( $client->__getFunctions() );
